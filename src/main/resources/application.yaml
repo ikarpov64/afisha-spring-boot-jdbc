@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: "afisha-spring-boot-jdbc"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/afisha
+    username: postgres
+    password: postgres
+    #    schema: application
+    driver: org.postgresql.Driver
+#  profiles:
+#    active: china

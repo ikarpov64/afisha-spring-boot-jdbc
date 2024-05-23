@@ -30,6 +30,6 @@ public class EventTypeService {
     @SneakyThrows
     public EventTypeDto getById(Long id) {
         return eventTypeMapper.toEventTypeDto(eventTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Place not found with id: " + id)));
+                .orElseThrow(() -> new RuntimeException("Event type not found with id: " + id)));
     }
 }

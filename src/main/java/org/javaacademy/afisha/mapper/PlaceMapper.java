@@ -12,6 +12,7 @@ public class PlaceMapper {
 
     public Place toPlace(PlaceDto placeDto) {
         Place place = new Place();
+        place.setId(placeDto.getId());
         place.setName(placeDto.getName());
         place.setAddress(placeDto.getAddress());
         place.setCity(placeDto.getCity());

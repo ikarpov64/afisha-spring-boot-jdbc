@@ -10,11 +10,17 @@ import java.util.List;
 @Component
 public class EventTypeMapper {
     public EventType toEventType(EventTypeDto eventTypeDto) {
-        return null;
+        EventType eventType = new EventType();
+        eventType.setId(eventTypeDto.getId());
+        eventType.setName(eventTypeDto.getName());
+        return eventType;
     }
 
     public EventTypeDto toEventTypeDto(EventType eventType) {
-        return null;
+        EventTypeDto eventTypeDto = new EventTypeDto();
+        eventTypeDto.setId(eventType.getId());
+        eventTypeDto.setName(eventType.getName());
+        return eventTypeDto;
     }
 
     public List<EventTypeDto> toEventTypesDto(Collection<EventType> eventTypes) {

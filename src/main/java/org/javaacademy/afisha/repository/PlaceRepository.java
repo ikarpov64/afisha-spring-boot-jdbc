@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.entity.Ticket;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -18,56 +20,39 @@ public class PlaceRepository {
     private static String FIND_QUERY = "SELECT * FROM application.place WHERE ID=?";
     private static String INSERT_QUERY = "INSERT INTO application.place(name, address, city) VALUES(?, ?, ?)";
     private static String UPDATE_QUERY = "UPDATE application.place SET is_sold=? WHERE ID=?";
-    private final Connection connection;
+    private final JdbcTemplate jdbcTemplate;
 
-    public List<Place> findAll() throws SQLException {
-        List<Place> places = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
-            while (resultSet.next()) {
-                Place place = new Place();
-                place.setId(resultSet.getLong("id"));
-                place.setName(resultSet.getString("name"));
-                place.setAddress(resultSet.getString("address"));
-                place.setCity(resultSet.getString("city"));
-                places.add(place);
-            }
-            return places;
+    private static final RowMapper<Place> PLACE_ROW_MAPPER = new RowMapper<Place>() {
+        @Override
+        public Place mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Place place = new Place();
+            place.setId(rs.getLong("id"));
+            place.setName(rs.getString("name"));
+            place.setAddress(rs.getString("address"));
+            place.setCity(rs.getString("city"));
+            return place;
         }
+    };
+
+    public List<Place> findAll() {
+        return jdbcTemplate.query(SELECT_QUERY, PLACE_ROW_MAPPER);
     }
 
     public Optional<Place> findById(Long id) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_QUERY)) {
-            preparedStatement.setLong(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    Place place = new Place();
-                    place.setId(resultSet.getLong("id"));
-                    place.setName(resultSet.getString("name"));
-                    place.setAddress(resultSet.getString("address"));
-                    place.setCity(resultSet.getString("city"));
-                    return Optional.of(place);
-                } else {
-                    return Optional.empty();
-                }
-            }
-        }
+        List<Place> places = jdbcTemplate.query(FIND_QUERY, PLACE_ROW_MAPPER, id);
+        return places.isEmpty() ? Optional.empty() : Optional.of(places.get(0));
     }
 
-    public Place save(Place place) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY,
-                Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, place.getName());
-            preparedStatement.setString(2, place.getAddress());
-            preparedStatement.setString(3, place.getCity());
-            preparedStatement.executeUpdate();
-
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    place.setId(generatedKeys.getLong(1));
-                }
-            }
-        }
+    public Place save(Place place) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, new String[]{"id"});
+            ps.setString(1, place.getName());
+            ps.setString(2, place.getAddress());
+            ps.setString(3, place.getCity());
+            return ps;
+        }, keyHolder);
+        place.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return place;
     }
 }

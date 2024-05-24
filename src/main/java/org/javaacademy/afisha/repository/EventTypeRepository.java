@@ -22,7 +22,6 @@ public class EventTypeRepository {
     private static String INSERT_QUERY = "INSERT INTO application.event_type(name) VALUES(?)";
     private static String UPDATE_QUERY = "UPDATE application.event_type SET is_sold=? WHERE ID=?";
     private final JdbcTemplate jdbcTemplate;
-//    private final Connection connection;
 
     private static final RowMapper<EventType> PLACE_ROW_MAPPER = new RowMapper<EventType>() {
         @Override

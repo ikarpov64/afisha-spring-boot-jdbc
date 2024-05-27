@@ -62,10 +62,10 @@ CREATE TABLE ticket (
 	is_sold boolean DEFAULT false
 );
 
--- Data for Name: event_type; Type: TABLE DATA; Schema: application; Owner: -
-INSERT INTO event_type VALUES (1, 'museum');
-INSERT INTO event_type VALUES (2, 'cinema');
-INSERT INTO event_type VALUES (3, 'theater');
+---- Data for Name: event_type; Type: TABLE DATA; Schema: application; Owner: -
+--INSERT INTO event_type VALUES (1, 'museum');
+--INSERT INTO event_type VALUES (2, 'cinema');
+--INSERT INTO event_type VALUES (3, 'theater');
 
 
 -- Name: pk_event_type; Type: CONSTRAINT; Schema: application; Owner: -; Tablespace: 

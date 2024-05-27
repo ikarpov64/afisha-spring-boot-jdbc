@@ -7,5 +7,5 @@ spring:
     password: postgres
     schema: "application"
     driver: org.postgresql.Driver
-#  profiles:
-#    active: china
+  profiles:
+    active: init

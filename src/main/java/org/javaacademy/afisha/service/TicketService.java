@@ -6,6 +6,7 @@ import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.Ticket;
+import org.javaacademy.afisha.exception.TicketNotFoundException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class TicketService {
 
     public TicketDto getById(Long id) {
         return ticketMapper.toTicketDto(ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id)));
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found with id: " + id)));
     }
 
     public TicketDto save(TicketDto ticketDto) {

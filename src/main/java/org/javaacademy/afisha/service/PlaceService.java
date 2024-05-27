@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.entity.Place;
+import org.javaacademy.afisha.exception.PlaceNotFoundException;
 import org.javaacademy.afisha.mapper.PlaceMapper;
 import org.javaacademy.afisha.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,6 @@ public class PlaceService {
     @SneakyThrows
     public PlaceDto getById(Long id) {
         return placeMapper.toPlaceDto(placeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Place not found with id: " + id)));
+                .orElseThrow(() -> new PlaceNotFoundException("Place not found with id: " + id)));
     }
 }

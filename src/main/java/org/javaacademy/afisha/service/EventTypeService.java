@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.EventTypeDto;
 import org.javaacademy.afisha.entity.EventType;
+import org.javaacademy.afisha.exception.EventTypeNotFoundException;
 import org.javaacademy.afisha.mapper.EventTypeMapper;
 import org.javaacademy.afisha.repository.EventTypeRepository;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,6 @@ public class EventTypeService {
     @SneakyThrows
     public EventTypeDto getById(Long id) {
         return eventTypeMapper.toEventTypeDto(eventTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event type not found with id: " + id)));
+                .orElseThrow(() -> new EventTypeNotFoundException("Event type not found with id: " + id)));
     }
 }

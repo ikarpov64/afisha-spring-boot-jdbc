@@ -2,10 +2,10 @@ spring:
   application:
     name: "afisha-spring-boot-jdbc"
   datasource:
-    url: jdbc:postgresql://localhost:5432/afisha
+    url: jdbc:postgresql://localhost:5432/afisha?options=-c%20search_path=application
     username: postgres
     password: postgres
-    #    schema: application
+    schema: "application"
     driver: org.postgresql.Driver
 #  profiles:
 #    active: china

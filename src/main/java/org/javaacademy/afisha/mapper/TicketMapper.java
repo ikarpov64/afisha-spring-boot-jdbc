@@ -27,7 +27,7 @@ public class TicketMapper {
         Ticket ticket = new Ticket();
         ticket.setId(ticketDto.getId());
         ticket.setEvent(eventMapper.toEvent(ticketDto.getEvent()));
-        ticket.setClientEmail(ticket.getClientEmail());
+        ticket.setClientEmail(ticketDto.getClientEmail());
         ticket.setPrice(ticketDto.getPrice());
         ticket.setSold(ticketDto.isSold());
         return ticket;

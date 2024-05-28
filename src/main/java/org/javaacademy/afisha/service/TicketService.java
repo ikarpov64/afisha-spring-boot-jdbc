@@ -1,19 +1,17 @@
 package org.javaacademy.afisha.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.EventDto;
-import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.dto.TicketDto;
-import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.Ticket;
 import org.javaacademy.afisha.exception.TicketNotFoundException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,6 +21,7 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
+//    private final EventService eventService;
 
     public List<TicketDto> getAll() {
         return ticketMapper.toTicketsDto(ticketRepository.findAll());
@@ -31,6 +30,10 @@ public class TicketService {
     public TicketDto getById(Long id) {
         return ticketMapper.toTicketDto(ticketRepository.findById(id)
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found with id: " + id)));
+    }
+
+    public List<TicketDto> getByEventId(Long id) {
+        return ticketMapper.toTicketsDto(ticketRepository.findByEventId(id));
     }
 
     public TicketDto save(TicketDto ticketDto) {
@@ -47,4 +50,5 @@ public class TicketService {
                     return ticketDto;
                 }).toList();
     }
+
 }

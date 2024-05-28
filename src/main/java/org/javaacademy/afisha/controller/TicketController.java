@@ -1,9 +1,8 @@
 package org.javaacademy.afisha.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.javaacademy.afisha.dto.EventDto;
-import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.dto.TicketDto;
+import org.javaacademy.afisha.service.SaleService;
 import org.javaacademy.afisha.service.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketController {
     private final TicketService ticketService;
+    private final SaleService saleService;
 
     @GetMapping
     public ResponseEntity<List<TicketDto>> getAll() {
@@ -32,5 +32,11 @@ public class TicketController {
     public ResponseEntity<TicketDto> save(@RequestBody TicketDto ticketDto) {
         TicketDto savedTicket = ticketService.save(ticketDto);
         return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Object> buyTicket(@PathVariable Long id, @RequestBody String clientEmail) {
+        saleService.saleTicket(id, clientEmail);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }

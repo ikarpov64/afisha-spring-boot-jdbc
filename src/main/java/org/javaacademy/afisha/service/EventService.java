@@ -7,6 +7,8 @@ import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.exception.EventNotFoundException;
 import org.javaacademy.afisha.mapper.EventMapper;
 import org.javaacademy.afisha.repository.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 

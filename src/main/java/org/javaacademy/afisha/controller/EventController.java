@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("api/v1/event")
 @RequiredArgsConstructor
 public class EventController {
+
     private final EventService eventService;
 
     @GetMapping

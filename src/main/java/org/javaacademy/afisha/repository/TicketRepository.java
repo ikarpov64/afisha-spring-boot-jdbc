@@ -24,6 +24,7 @@ import java.util.Optional;
 public class TicketRepository {
     private static String SELECT_QUERY = "SELECT * FROM ticket";
     private static String FIND_QUERY = "SELECT * FROM ticket WHERE ID=?";
+    private static String FIND_QUERY_BY_EVENT_ID = "SELECT * FROM ticket WHERE event_id=? and is_sold=?";
     private static String INSERT_QUERY = "INSERT INTO ticket(event_id, client_email, price) VALUES(?, ?, ?)";
     private static String UPDATE_QUERY = "UPDATE ticket SET is_sold=? WHERE ID=?";
     private final EventRepository eventRepository;
@@ -51,6 +52,10 @@ public class TicketRepository {
     public Optional<Ticket> findById(Long id) {
         List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY, new TicektRowMapper(), id);
         return tickets.isEmpty() ? Optional.empty() : Optional.of(tickets.get(0));
+    }
+
+    public List<Ticket> findByEventId(Long id) {
+        return jdbcTemplate.query(FIND_QUERY_BY_EVENT_ID, new TicektRowMapper(), id, false);
     }
 
     public Ticket save(Ticket ticket) {

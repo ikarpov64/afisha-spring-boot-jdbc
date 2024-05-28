@@ -3,6 +3,7 @@ package org.javaacademy.afisha.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.EventDto;
+import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.Ticket;
@@ -11,7 +12,10 @@ import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,4 +38,13 @@ public class TicketService {
         return ticketMapper.toTicketDto(savedTicket);
     }
 
+    public List<TicketDto> generateTickets(int ticketCount, EventDto eventDto, BigDecimal price) {
+        return IntStream.range(0, ticketCount)
+                .mapToObj(i -> {
+                    TicketDto ticketDto = new TicketDto();
+                    ticketDto.setEvent(eventDto);
+                    ticketDto.setPrice(price);
+                    return ticketDto;
+                }).toList();
+    }
 }

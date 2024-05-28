@@ -2,6 +2,7 @@ package org.javaacademy.afisha.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
+import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.entity.Event;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,15 @@ public class EventMapper {
         eventDto.setEventDate(event.getEventDate());
         eventDto.setEventType(eventTypeMapper.toEventTypeDto(event.getEventType()));
         eventDto.setPlace(placeMapper.toPlaceDto(event.getPlace()));
+        return eventDto;
+    }
+
+    public EventDto toEventDto(EventDtoRq eventDtoRq) {
+        EventDto eventDto = new EventDto();
+        eventDto.setId(eventDtoRq.getId());
+        eventDto.setName(eventDtoRq.getName());
+        eventDto.setEventDate(eventDtoRq.getEventDate());
+        eventDto.setPlace(eventDtoRq.getPlace());
         return eventDto;
     }
 

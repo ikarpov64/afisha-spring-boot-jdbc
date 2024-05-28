@@ -14,7 +14,6 @@ public class EventDtoRq {
     private Long id;
     private String name;
     private LocalDateTime eventDate;
-    private EventTypeDto eventType;
     private PlaceDto place;
     private BigDecimal price;
 }

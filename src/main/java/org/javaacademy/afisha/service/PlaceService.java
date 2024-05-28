@@ -18,18 +18,15 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceMapper placeMapper;
 
-    @SneakyThrows
     public List<PlaceDto> getAll() {
         return placeMapper.toPlacesDto(placeRepository.findAll());
     }
 
-    @SneakyThrows
     public PlaceDto save(PlaceDto place) {
         Place savedPlace = placeRepository.save(placeMapper.toPlace(place));
         return placeMapper.toPlaceDto(savedPlace);
     }
 
-    @SneakyThrows
     public PlaceDto getById(Long id) {
         return placeMapper.toPlaceDto(placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException("Place not found with id: " + id)));

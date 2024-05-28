@@ -17,18 +17,15 @@ public class EventTypeService {
     private final EventTypeRepository eventTypeRepository;
     private final EventTypeMapper eventTypeMapper;
 
-    @SneakyThrows
     public List<EventTypeDto> getAll() {
         return eventTypeMapper.toEventTypesDto(eventTypeRepository.findAll());
     }
 
-    @SneakyThrows
     public EventTypeDto save(EventTypeDto eventType) {
         EventType savedEventType = eventTypeRepository.save(eventTypeMapper.toEventType(eventType));
         return eventTypeMapper.toEventTypeDto(savedEventType);
     }
 
-    @SneakyThrows
     public EventTypeDto getById(Long id) {
         return eventTypeMapper.toEventTypeDto(eventTypeRepository.findById(id)
                 .orElseThrow(() -> new EventTypeNotFoundException("Event type not found with id: " + id)));

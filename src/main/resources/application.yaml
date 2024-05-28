@@ -7,5 +7,10 @@ spring:
     password: postgres
     schema: "application"
     driver: org.postgresql.Driver
-  profiles:
-    active: init
+
+  #  profiles:
+  #    active: init
+ticket:
+  quantities:
+    cinema: 100
+    theater: 50

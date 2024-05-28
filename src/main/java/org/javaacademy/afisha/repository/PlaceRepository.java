@@ -38,7 +38,7 @@ public class PlaceRepository {
         return jdbcTemplate.query(SELECT_QUERY, PLACE_ROW_MAPPER);
     }
 
-    public Optional<Place> findById(Long id) throws SQLException {
+    public Optional<Place> findById(Long id) {
         List<Place> places = jdbcTemplate.query(FIND_QUERY, PLACE_ROW_MAPPER, id);
         return places.isEmpty() ? Optional.empty() : Optional.of(places.get(0));
     }

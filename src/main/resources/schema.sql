@@ -23,7 +23,6 @@ DROP TABLE IF EXISTS event_type;
 DROP TABLE IF EXISTS place;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS ticket;
-DROP TABLE IF EXISTS event_type;
 
 
 -- Name: event_type; Type: TABLE; Schema: application; Owner: -; Tablespace: 

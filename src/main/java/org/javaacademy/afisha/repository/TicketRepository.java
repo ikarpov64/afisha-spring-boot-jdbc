@@ -1,20 +1,15 @@
 package org.javaacademy.afisha.repository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Event;
-import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.entity.Ticket;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,12 +19,13 @@ import java.util.Optional;
 public class TicketRepository {
     private static String SELECT_QUERY = "SELECT * FROM ticket";
     private static String FIND_QUERY = "SELECT * FROM ticket WHERE ID=?";
-    private static String FIND_QUERY_BY_EVENT_ID = "SELECT * FROM ticket WHERE event_id=? and is_sold=?";
+    private static String FIND_QUERY_BY_EVENT_ID = "SELECT * FROM ticket WHERE event_id=? and is_sold=? LIMIT 1";
     private static String INSERT_QUERY = "INSERT INTO ticket(event_id, client_email, price) VALUES(?, ?, ?)";
-    private static String UPDATE_QUERY = "UPDATE ticket SET is_sold=? WHERE ID=?";
+    private static String UPDATE_QUERY = "UPDATE ticket SET is_sold=?, client_email=? WHERE id=?";
     private final EventRepository eventRepository;
     private final JdbcTemplate jdbcTemplate;
-    private class TicektRowMapper implements RowMapper<Ticket> {
+
+    private class TicketRowMapper implements RowMapper<Ticket> {
         @Override
         public Ticket mapRow(ResultSet rs, int rowNum) throws SQLException {
             Ticket ticket = new Ticket();
@@ -41,21 +37,28 @@ public class TicketRepository {
             Event event = eventRepository.findById(evenId).orElseThrow();
             ticket.setEvent(event);
 
+            ticket.setSold(rs.getBoolean("is_sold"));
+
             return ticket;
         }
     };
 
     public List<Ticket> findAll() {
-        return jdbcTemplate.query(SELECT_QUERY, new TicektRowMapper());
+        return jdbcTemplate.query(SELECT_QUERY, new TicketRowMapper());
     }
 
     public Optional<Ticket> findById(Long id) {
-        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY, new TicektRowMapper(), id);
+        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY, new TicketRowMapper(), id);
         return tickets.isEmpty() ? Optional.empty() : Optional.of(tickets.get(0));
     }
 
-    public List<Ticket> findByEventId(Long id) {
-        return jdbcTemplate.query(FIND_QUERY_BY_EVENT_ID, new TicektRowMapper(), id, false);
+    public Optional<Ticket> findByEventId(Long id) {
+        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY_BY_EVENT_ID, new TicketRowMapper(), id, false);
+        return tickets.isEmpty() ? Optional.empty() : Optional.of(tickets.get(0));
+    }
+
+    public int sell(TicketDto ticketDto) {
+        return jdbcTemplate.update(UPDATE_QUERY, true, ticketDto.getClientEmail(), ticketDto.getId());
     }
 
     public Ticket save(Ticket ticket) {

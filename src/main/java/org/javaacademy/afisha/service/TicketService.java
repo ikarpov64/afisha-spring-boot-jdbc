@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
@@ -32,8 +33,9 @@ public class TicketService {
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found with id: " + id)));
     }
 
-    public List<TicketDto> getByEventId(Long id) {
-        return ticketMapper.toTicketsDto(ticketRepository.findByEventId(id));
+    public Ticket getByEventId(Long id) {
+        Optional<Ticket> ticket = ticketRepository.findByEventId(id);
+        return ticket.orElseThrow(() -> new RuntimeException("Все билеты проданы"));
     }
 
     public TicketDto save(TicketDto ticketDto) {
@@ -51,4 +53,7 @@ public class TicketService {
                 }).toList();
     }
 
+    public int sellTicket(Ticket ticket) {
+        return ticketRepository.sell(ticketMapper.toTicketDto(ticket));
+    }
 }

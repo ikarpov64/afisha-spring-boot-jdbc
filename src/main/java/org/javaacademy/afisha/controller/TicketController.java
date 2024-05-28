@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketController {
     private final TicketService ticketService;
-    private final SaleService saleService;
 
     @GetMapping
     public ResponseEntity<List<TicketDto>> getAll() {
@@ -32,11 +31,5 @@ public class TicketController {
     public ResponseEntity<TicketDto> save(@RequestBody TicketDto ticketDto) {
         TicketDto savedTicket = ticketService.save(ticketDto);
         return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
-    }
-
-    @PatchMapping("{id}")
-    public ResponseEntity<Object> buyTicket(@PathVariable Long id, @RequestBody String clientEmail) {
-        saleService.saleTicket(id, clientEmail);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }

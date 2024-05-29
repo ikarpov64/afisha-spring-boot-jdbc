@@ -1,6 +1,8 @@
 package org.javaacademy.afisha.controller;
 
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.service.TicketService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/ticket")
 @RequiredArgsConstructor
+@Tag(name = "Билеты V1", description = "Управление билетами для мероприятий")
 public class TicketController {
     private final TicketService ticketService;
 

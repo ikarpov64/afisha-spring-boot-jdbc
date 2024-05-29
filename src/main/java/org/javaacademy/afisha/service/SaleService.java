@@ -20,6 +20,7 @@ public class SaleService {
     private final TicketMapper ticketMapper;
     private final TicketQuantitiesConfig ticketQuantitiesConfig;
 
+    // TODO: 29.05.2024 Переписать javadoc 
     /**
      * Генерирует отчет по мероприятиям с деталями о количестве проданных билетов и общей сумме продаж.
      * <p>

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.Ticket;
+import org.javaacademy.afisha.mapper.TicketMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,38 +28,20 @@ public class TicketRepository {
     private static String FIND_QUERY_BY_EVENT_ID = "SELECT * FROM ticket WHERE event_id=? and is_sold=? LIMIT 1";
     private static String INSERT_QUERY = "INSERT INTO ticket(event_id, client_email, price) VALUES(?, ?, ?)";
     private static String UPDATE_QUERY = "UPDATE ticket SET is_sold=?, client_email=? WHERE id=?";
-    private final EventRepository eventRepository;
+    private final TicketMapper ticketMapper;
     private final JdbcTemplate jdbcTemplate;
 
-    private class TicketRowMapper implements RowMapper<Ticket> {
-        @Override
-        public Ticket mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Ticket ticket = new Ticket();
-            ticket.setId(rs.getLong("id"));
-            ticket.setPrice(rs.getBigDecimal("price"));
-            ticket.setClientEmail(rs.getString("client_email"));
-
-            Long evenId = rs.getLong("event_id");
-            Event event = eventRepository.findById(evenId).orElseThrow();
-            ticket.setEvent(event);
-
-            ticket.setSold(rs.getBoolean("is_sold"));
-
-            return ticket;
-        }
-    }
-
     public List<Ticket> findAll() {
-        return jdbcTemplate.query(SELECT_QUERY, new TicketRowMapper());
+        return jdbcTemplate.query(SELECT_QUERY, ticketMapper);
     }
 
     public Optional<Ticket> findById(Long id) {
-        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY, new TicketRowMapper(), id);
+        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY, ticketMapper, id);
         return tickets.isEmpty() ? Optional.empty() : Optional.of(tickets.get(0));
     }
 
     public Optional<Ticket> findByEventId(Long id) {
-        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY_BY_EVENT_ID, new TicketRowMapper(), id, false);
+        List<Ticket> tickets = jdbcTemplate.query(FIND_QUERY_BY_EVENT_ID, ticketMapper, id, false);
         return tickets.isEmpty() ? Optional.empty() : Optional.of(tickets.get(0));
     }
 

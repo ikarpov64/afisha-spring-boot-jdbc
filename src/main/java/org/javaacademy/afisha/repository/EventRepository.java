@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.EventType;
 import org.javaacademy.afisha.entity.Place;
+import org.javaacademy.afisha.mapper.EventMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -29,36 +30,15 @@ public class EventRepository {
     private static String FIND_QUERY = "SELECT * FROM application.event WHERE ID=?";
     private static String INSERT_QUERY = "INSERT INTO application.event(name, event_date, event_type_id, place_id) "
             + "VALUES(?, ?, ?, ?)";
+    private final EventMapper eventMapper;
     private final JdbcTemplate jdbcTemplate;
-    private final EventTypeRepository eventTypeRepository;
-    private final PlaceRepository placeRepository;
-
-    private class EventRowMapper implements RowMapper<Event> {
-        @Override
-        public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Event event = new Event();
-            event.setId(rs.getLong("id"));
-            event.setName(rs.getString("name"));
-            event.setEventDate(rs.getTimestamp("event_date").toLocalDateTime());
-
-            Long eventTypeId = rs.getLong("event_type_id");
-            EventType eventType = eventTypeRepository.findById(eventTypeId).orElseThrow();
-            event.setEventType(eventType);
-
-            Long placeId = rs.getLong("place_id");
-            Place place = placeRepository.findById(placeId).orElseThrow();
-            event.setPlace(place);
-
-            return event;
-        }
-    }
 
     public List<Event> findAll() {
-        return jdbcTemplate.query(SELECT_QUERY, new EventRowMapper());
+        return jdbcTemplate.query(SELECT_QUERY, eventMapper);
     }
 
     public Optional<Event> findById(Long id) {
-        List<Event> events = jdbcTemplate.query(FIND_QUERY, new EventRowMapper(), id);
+        List<Event> events = jdbcTemplate.query(FIND_QUERY, eventMapper, id);
         return events.isEmpty() ? Optional.empty() : Optional.of(events.get(0));
     }
 

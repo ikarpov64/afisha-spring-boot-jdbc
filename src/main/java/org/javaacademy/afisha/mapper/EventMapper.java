@@ -1,18 +1,27 @@
 package org.javaacademy.afisha.mapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.entity.Event;
+import org.javaacademy.afisha.entity.EventType;
+import org.javaacademy.afisha.entity.Place;
+import org.javaacademy.afisha.repository.EventTypeRepository;
+import org.javaacademy.afisha.repository.PlaceRepository;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EventMapper {
+public class EventMapper implements RowMapper<Event> {
     private final EventTypeMapper eventTypeMapper;
     private final PlaceMapper placeMapper;
+    private final EventTypeRepository eventTypeRepository;
+    private final PlaceRepository placeRepository;
 
     public Event toEvent(EventDto eventDto) {
         Event event = new Event();
@@ -47,5 +56,23 @@ public class EventMapper {
         return events.stream()
                 .map(this::toEventDto)
                 .toList();
+    }
+
+    @Override
+    public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Event event = new Event();
+        event.setId(rs.getLong("id"));
+        event.setName(rs.getString("name"));
+        event.setEventDate(rs.getTimestamp("event_date").toLocalDateTime());
+
+        Long eventTypeId = rs.getLong("event_type_id");
+        EventType eventType = eventTypeRepository.findById(eventTypeId).orElseThrow();
+        event.setEventType(eventType);
+
+        Long placeId = rs.getLong("place_id");
+        Place place = placeRepository.findById(placeId).orElseThrow();
+        event.setPlace(place);
+
+        return event;
     }
 }

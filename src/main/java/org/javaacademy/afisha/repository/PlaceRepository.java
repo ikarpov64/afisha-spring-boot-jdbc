@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.Place;
+import org.javaacademy.afisha.mapper.PlaceMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -22,27 +23,15 @@ public class PlaceRepository {
     private static String SELECT_QUERY = "SELECT * FROM application.place";
     private static String FIND_QUERY = "SELECT * FROM application.place WHERE ID=?";
     private static String INSERT_QUERY = "INSERT INTO application.place(name, address, city) VALUES(?, ?, ?)";
-    private static String UPDATE_QUERY = "UPDATE application.place SET is_sold=? WHERE ID=?";
+    private final PlaceMapper placeMapper;
     private final JdbcTemplate jdbcTemplate;
 
-    private static final RowMapper<Place> PLACE_ROW_MAPPER = new RowMapper<Place>() {
-        @Override
-        public Place mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Place place = new Place();
-            place.setId(rs.getLong("id"));
-            place.setName(rs.getString("name"));
-            place.setAddress(rs.getString("address"));
-            place.setCity(rs.getString("city"));
-            return place;
-        }
-    };
-
     public List<Place> findAll() {
-        return jdbcTemplate.query(SELECT_QUERY, PLACE_ROW_MAPPER);
+        return jdbcTemplate.query(SELECT_QUERY, placeMapper);
     }
 
     public Optional<Place> findById(Long id) {
-        List<Place> places = jdbcTemplate.query(FIND_QUERY, PLACE_ROW_MAPPER, id);
+        List<Place> places = jdbcTemplate.query(FIND_QUERY, placeMapper, id);
         return places.isEmpty() ? Optional.empty() : Optional.of(places.get(0));
     }
 

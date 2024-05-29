@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.EventType;
+import org.javaacademy.afisha.mapper.EventTypeMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -23,25 +24,15 @@ public class EventTypeRepository {
     private static String SELECT_QUERY = "SELECT * FROM application.event_type";
     private static String FIND_QUERY = "SELECT * FROM application.event_type WHERE ID=?";
     private static String INSERT_QUERY = "INSERT INTO application.event_type(name) VALUES(?)";
-    private static String UPDATE_QUERY = "UPDATE application.event_type SET is_sold=? WHERE ID=?";
+    private final EventTypeMapper eventTypeMapper;
     private final JdbcTemplate jdbcTemplate;
 
-    private static final RowMapper<EventType> PLACE_ROW_MAPPER = new RowMapper<EventType>() {
-        @Override
-        public EventType mapRow(ResultSet rs, int rowNum) throws SQLException {
-            EventType eventType = new EventType();
-            eventType.setId(rs.getLong("id"));
-            eventType.setName(rs.getString("name"));
-            return eventType;
-        }
-    };
-
     public List<EventType> findAll() {
-        return jdbcTemplate.query(SELECT_QUERY, PLACE_ROW_MAPPER);
+        return jdbcTemplate.query(SELECT_QUERY, eventTypeMapper);
     }
 
     public Optional<EventType> findById(Long id) {
-        List<EventType> eventTypes = jdbcTemplate.query(FIND_QUERY, PLACE_ROW_MAPPER, id);
+        List<EventType> eventTypes = jdbcTemplate.query(FIND_QUERY, eventTypeMapper, id);
         return eventTypes.isEmpty() ? Optional.empty() : Optional.of(eventTypes.get(0));
     }
 

@@ -22,7 +22,8 @@ public class PlaceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlaceDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(placeService.getById(id));
+        PlaceDto place = placeService.getById(id);
+        return new ResponseEntity<>(place, HttpStatus.OK);
     }
 
     @PostMapping

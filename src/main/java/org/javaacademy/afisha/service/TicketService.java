@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Ticket;
+import org.javaacademy.afisha.exception.TicketNotAvailableException;
 import org.javaacademy.afisha.exception.TicketNotFoundException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
@@ -31,7 +32,7 @@ public class TicketService {
 
     public Ticket getByEventId(Long id) {
         Optional<Ticket> ticket = ticketRepository.findByEventId(id);
-        return ticket.orElseThrow(() -> new RuntimeException("Все билеты проданы"));
+        return ticket.orElseThrow(() -> new TicketNotAvailableException("No tickets for sale"));
     }
 
     public TicketDto save(TicketDto ticketDto) {

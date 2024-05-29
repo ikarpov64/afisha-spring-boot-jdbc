@@ -6,6 +6,7 @@ import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.ReportDtoRs;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Ticket;
+import org.javaacademy.afisha.exception.TicketNotAvailableException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.ReportRepository;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class SaleService {
             newTicket.setEvent(event);
             newTicket.setClientEmail(clientEmail);
             newTicket.setSold(true);
+            // TODO: 29.05.2024 Сохраняет тикет со статусом не продан, доделать.
             return ticketService.save(newTicket);
         }
         Ticket ticket = ticketService.getByEventId(eventId);
@@ -50,6 +52,6 @@ public class SaleService {
         if (ticketService.sellTicket(ticket) != 0) {
             return ticketMapper.toTicketDto(ticket);
         }
-        return null;
+        throw new TicketNotAvailableException("No tickets for sale");
     }
 }

@@ -1,16 +1,13 @@
 package org.javaacademy.afisha.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.exception.PlaceNotFoundException;
 import org.javaacademy.afisha.mapper.PlaceMapper;
 import org.javaacademy.afisha.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

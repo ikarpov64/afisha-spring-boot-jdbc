@@ -1,5 +1,7 @@
 package org.javaacademy.afisha.service;
 
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.config.TicketQuantitiesConfig;
 import org.javaacademy.afisha.dto.*;
@@ -7,13 +9,9 @@ import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.exception.EventNotFoundException;
 import org.javaacademy.afisha.mapper.EventMapper;
 import org.javaacademy.afisha.repository.EventRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +64,9 @@ public class EventService {
 
                 int ticketQty = ticketQuantities.getOrDefault(eventTypeDto.getName(), 0);
                 if (ticketQty > 0) {
-                    List<TicketDto> ticketsDto = ticketService.generateTickets(ticketQty, savedEvent, eventDtoRq.getPrice());
+                    List<TicketDto> ticketsDto = ticketService.generateTickets(ticketQty,
+                            savedEvent,
+                            eventDtoRq.getPrice());
                     ticketsDto.forEach(ticketService::save);
                 }
             });

@@ -1,15 +1,13 @@
 package org.javaacademy.afisha.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.javaacademy.afisha.dto.EventTypeDto;
 import org.javaacademy.afisha.entity.EventType;
 import org.javaacademy.afisha.exception.EventTypeNotFoundException;
 import org.javaacademy.afisha.mapper.EventTypeMapper;
 import org.javaacademy.afisha.repository.EventTypeRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -1,5 +1,12 @@
 package org.javaacademy.afisha.repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.EventType;
@@ -8,14 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Репозиторий для выполнения запросов и получения мероприятий.
@@ -28,9 +27,8 @@ import java.util.Optional;
 public class EventRepository {
     private static String SELECT_QUERY = "SELECT * FROM application.event";
     private static String FIND_QUERY = "SELECT * FROM application.event WHERE ID=?";
-    private static String INSERT_QUERY = "INSERT INTO application.event(name, event_date, event_type_id, place_id) " +
-            "VALUES(?, ?, ?, ?)";
-//    private static String UPDATE_QUERY = "UPDATE application.event SET is_sold=? WHERE ID=?";
+    private static String INSERT_QUERY = "INSERT INTO application.event(name, event_date, event_type_id, place_id) "
+            + "VALUES(?, ?, ?, ?)";
     private final JdbcTemplate jdbcTemplate;
     private final EventTypeRepository eventTypeRepository;
     private final PlaceRepository placeRepository;
@@ -53,7 +51,7 @@ public class EventRepository {
 
             return event;
         }
-    };
+    }
 
     public List<Event> findAll() {
         return jdbcTemplate.query(SELECT_QUERY, new EventRowMapper());

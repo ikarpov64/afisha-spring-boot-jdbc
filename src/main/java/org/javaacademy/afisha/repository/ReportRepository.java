@@ -1,14 +1,13 @@
 package org.javaacademy.afisha.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.ReportDtoRs;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Репозиторий для выполнения запросов и получения отчетов по мероприятиям.
@@ -47,7 +46,7 @@ public class ReportRepository {
             report.setSoldAmount(rs.getBigDecimal("sold_amount"));
             return report;
         }
-    };
+    }
 
     /**
      * Получает отчет по мероприятиям.

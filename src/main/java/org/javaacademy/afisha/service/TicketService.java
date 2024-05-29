@@ -1,5 +1,9 @@
 package org.javaacademy.afisha.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.TicketDto;
@@ -8,11 +12,6 @@ import org.javaacademy.afisha.exception.TicketNotFoundException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor

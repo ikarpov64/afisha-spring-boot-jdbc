@@ -1,13 +1,12 @@
 package org.javaacademy.afisha.mapper;
 
+import java.util.Collection;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.EventDtoRq;
 import org.javaacademy.afisha.entity.Event;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

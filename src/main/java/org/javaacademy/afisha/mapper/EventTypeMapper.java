@@ -1,11 +1,10 @@
 package org.javaacademy.afisha.mapper;
 
+import java.util.Collection;
+import java.util.List;
 import org.javaacademy.afisha.dto.EventTypeDto;
 import org.javaacademy.afisha.entity.EventType;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.List;
 
 @Component
 public class EventTypeMapper {

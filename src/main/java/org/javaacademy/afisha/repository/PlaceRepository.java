@@ -1,5 +1,7 @@
 package org.javaacademy.afisha.repository;
 
+import java.sql.*;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.Place;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,9 +9,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-
-import java.sql.*;
-import java.util.*;
 
 /**
  * Репозиторий для выполнения запросов и получения мест проведения мероприятий.

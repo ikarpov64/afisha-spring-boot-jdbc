@@ -1,11 +1,10 @@
 package org.javaacademy.afisha.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.ReportDtoRs;
 import org.javaacademy.afisha.repository.ReportRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

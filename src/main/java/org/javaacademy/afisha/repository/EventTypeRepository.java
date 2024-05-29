@@ -1,16 +1,15 @@
 package org.javaacademy.afisha.repository;
 
+import java.sql.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.EventType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
-
-import java.sql.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Репозиторий для выполнения запросов и получения типов проведения мероприятий.

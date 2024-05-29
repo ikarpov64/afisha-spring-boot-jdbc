@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Репозиторий для выполнения запросов и получения мероприятий.
+ * <p>
+ * Этот компонент использует {@link JdbcTemplate} для выполнения SQL-запросов и получения данных.
+ * </p>
+ */
 @Component
 @RequiredArgsConstructor
 public class EventRepository {

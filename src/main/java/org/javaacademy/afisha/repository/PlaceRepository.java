@@ -1,9 +1,7 @@
 package org.javaacademy.afisha.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.entity.Place;
-import org.javaacademy.afisha.entity.Ticket;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +11,12 @@ import org.springframework.stereotype.Component;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Репозиторий для выполнения запросов и получения мест проведения мероприятий.
+ * <p>
+ * Этот компонент использует {@link JdbcTemplate} для выполнения SQL-запросов и получения данных.
+ * </p>
+ */
 @Component
 @RequiredArgsConstructor
 public class PlaceRepository {

@@ -7,8 +7,6 @@ import org.javaacademy.afisha.entity.Ticket;
 import org.javaacademy.afisha.exception.TicketNotFoundException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.TicketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,7 +20,6 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
-//    private final EventService eventService;
 
     public List<TicketDto> getAll() {
         return ticketMapper.toTicketsDto(ticketRepository.findAll());

@@ -42,7 +42,8 @@ public class EventService {
 
     public EventDto save(EventDto eventDto) {
         placeRepository.findById(eventDto.getPlace().getId()).orElseThrow(
-                () -> new PlaceNotFoundException("Place not found with [id: %s]".formatted(eventDto.getPlace().getId())));
+                () -> new PlaceNotFoundException("Place not found with [id: %s]"
+                        .formatted(eventDto.getPlace().getId())));
         eventTypeRepository.findById(eventDto.getEventType().getId()).orElseThrow(
                 () -> new EventTypeNotFoundException("Event type not found with [id: %s]"
                         .formatted(eventDto.getEventType().getId())));

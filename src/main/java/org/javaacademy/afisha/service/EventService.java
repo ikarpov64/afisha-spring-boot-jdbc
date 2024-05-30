@@ -6,9 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.config.TicketQuantitiesConfig;
 import org.javaacademy.afisha.dto.*;
 import org.javaacademy.afisha.entity.Event;
+import org.javaacademy.afisha.entity.EventType;
+import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.exception.EventNotFoundException;
+import org.javaacademy.afisha.exception.EventTypeNotFoundException;
+import org.javaacademy.afisha.exception.PlaceNotFoundException;
 import org.javaacademy.afisha.mapper.EventMapper;
 import org.javaacademy.afisha.repository.EventRepository;
+import org.javaacademy.afisha.repository.EventTypeRepository;
+import org.javaacademy.afisha.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -17,6 +23,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
+    private final EventTypeRepository eventTypeRepository;
+    private final PlaceRepository placeRepository;
     private final EventMapper eventMapper;
     private final TransactionTemplate transactionTemplate;
     private final TicketService ticketService;
@@ -29,10 +37,16 @@ public class EventService {
 
     public EventDto getById(Long id) {
         return eventMapper.toEventDto(eventRepository.findById(id)
-                .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + id)));
+                .orElseThrow(() -> new EventNotFoundException("Event not found with [id: %s]".formatted(id))));
     }
 
     public EventDto save(EventDto eventDto) {
+        placeRepository.findById(eventDto.getPlace().getId()).orElseThrow(
+                () -> new PlaceNotFoundException("Place not found with [id: %s]".formatted(eventDto.getPlace().getId())));
+        eventTypeRepository.findById(eventDto.getEventType().getId()).orElseThrow(
+                () -> new EventTypeNotFoundException("Event type not found with [id: %s]"
+                        .formatted(eventDto.getEventType().getId())));
+
         Event savedEvent = eventRepository.save(eventMapper.toEvent(eventDto));
         return eventMapper.toEventDto(savedEvent);
     }

@@ -28,6 +28,14 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(EventCannotBeSavedException.class)
+    public ProblemDetail handleEventCannotBeSaveException(EventCannotBeSavedException e) {
+        ProblemDetail problemDetail = createProblemDetail(HttpStatus.NOT_FOUND, e);
+        problemDetail.setTitle("Place or EventType not found");
+        problemDetail.setProperty("errorCode", "NOT_FOUND");
+        return problemDetail;
+    }
+
     private ProblemDetail createProblemDetail(HttpStatus status, Exception e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, e.getMessage());
         problemDetail.setProperty("timestamp", Instant.now());

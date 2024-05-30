@@ -26,6 +26,6 @@ public class PlaceService {
 
     public PlaceDto getById(Long id) {
         return placeMapper.toPlaceDto(placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException("Place not found with id: " + id)));
+                .orElseThrow(() -> new PlaceNotFoundException("Place not found with [id: %s]".formatted(id))));
     }
 }

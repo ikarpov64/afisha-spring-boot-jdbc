@@ -1,7 +1,6 @@
 package org.javaacademy.afisha.controller;
 
 import java.util.List;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -54,6 +53,20 @@ public class EventController {
         return ResponseEntity.ok(eventService.getById(id));
     }
 
+    @Operation(summary = "Создание нового мероприятия",
+            description = "Создается единичное мероприятия по переданному телу json.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "OK: Мероприятие сохранено",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = EventDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT_FOUND: место проведения или тип мероприятия с переданным ID не существуют."
+            )
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EventDto> save(@RequestBody EventDto eventDto) {
@@ -61,7 +74,22 @@ public class EventController {
         return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
     }
 
-    @PostMapping("/many")
+    @Operation(summary = "Создание новых мероприятий",
+            description = "Создается множество мероприятий по переданным данным в теле json. " +
+                    "Количество мероприятий предопределенное в properties.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "OK: Мероприятия сохранены",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = EventDtoRq.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT_FOUND: место проведения c переданным ID не существует."
+            )
+    })
+    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EventDto> save(@RequestBody EventDtoRq eventDtoRq) {
         eventService.createEvents(eventDtoRq);

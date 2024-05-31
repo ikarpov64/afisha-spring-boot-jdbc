@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.mapper.PlaceMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,6 @@ public class PlaceRepository {
     private static String SELECT_QUERY = "SELECT * FROM application.place";
     private static String FIND_QUERY = "SELECT * FROM application.place WHERE ID=?";
     private static String INSERT_QUERY = "INSERT INTO application.place(name, address, city) VALUES(?, ?, ?)";
-    private static String DELETE_QUERY = "TRUNCATE application.place cascade";
     private final PlaceMapper placeMapper;
     private final JdbcTemplate jdbcTemplate;
 
@@ -47,9 +45,5 @@ public class PlaceRepository {
         }, keyHolder);
         place.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return place;
-    }
-
-    public void deleteALL() {
-        jdbcTemplate.update(DELETE_QUERY);
     }
 }

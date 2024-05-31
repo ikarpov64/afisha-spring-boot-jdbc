@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/afisha?options=-c%20search_path=application
     username: postgres
-    password: admin
+    password: postgres
     schema: "application"
     driver: org.postgresql.Driver
 

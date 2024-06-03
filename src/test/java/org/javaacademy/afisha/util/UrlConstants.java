@@ -12,6 +12,6 @@ public class UrlConstants {
     public static final String EVENT_NEW_URL = "/event/new";
     public static final String TICKET_URL = "/ticket";
     public static final String TICKET_URL_VAR = "/ticket/{id}";
-    public static final String REPORT_URL = "/report";
+    public static final String REPORT_URL = "/api/v1/report";
     public static final String SALE_URL = "/sale/{id}";
 }

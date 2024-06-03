@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.EventDto;
 import org.javaacademy.afisha.dto.EventDtoRq;
@@ -23,7 +24,7 @@ public class EventMapper implements RowMapper<Event> {
     private final EventTypeRepository eventTypeRepository;
     private final PlaceRepository placeRepository;
 
-    public Event toEvent(EventDto eventDto) {
+    public Event toEvent(@NonNull EventDto eventDto) {
         Event event = new Event();
         event.setId(eventDto.getId());
         event.setName(eventDto.getName());
@@ -33,7 +34,7 @@ public class EventMapper implements RowMapper<Event> {
         return event;
     }
 
-    public EventDto toEventDto(Event event) {
+    public EventDto toEventDto(@NonNull Event event) {
         EventDto eventDto = new EventDto();
         eventDto.setId(event.getId());
         eventDto.setName(event.getName());
@@ -43,7 +44,7 @@ public class EventMapper implements RowMapper<Event> {
         return eventDto;
     }
 
-    public EventDto toEventDto(EventDtoRq eventDtoRq) {
+    public EventDto toEventDto(@NonNull EventDtoRq eventDtoRq) {
         EventDto eventDto = new EventDto();
         eventDto.setId(eventDtoRq.getId());
         eventDto.setName(eventDtoRq.getName());
@@ -52,7 +53,7 @@ public class EventMapper implements RowMapper<Event> {
         return eventDto;
     }
 
-    public List<EventDto> toEventsDto(Collection<Event> events) {
+    public List<EventDto> toEventsDto(@NonNull Collection<Event> events) {
         return events.stream()
                 .map(this::toEventDto)
                 .toList();

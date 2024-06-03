@@ -1,5 +1,6 @@
 package org.javaacademy.afisha.it.controller;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
@@ -15,30 +16,26 @@ import org.javaacademy.afisha.util.UrlConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
 @Slf4j
 @RequiredArgsConstructor
 public class PlaceControllerIntegrationTest {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     public void init() {
-        clearDb();
+        TestUtils.clearDb();
     }
 
     @Test
     @SneakyThrows
     @DisplayName("Тестирование Post запроса с проверкой Status code = 201")
     public void createPlaceReturnCreated() {
-        PlaceDto savedPlaceDto = RestAssured.given()
+        PlaceDto savedPlaceDto = given()
                 .body(TestUtils.jsonStringFromObject(TestUtils.getPlaceDto()))
                 .contentType(ContentType.JSON)
                 .post(UrlConstants.PLACE_URL)
@@ -54,7 +51,7 @@ public class PlaceControllerIntegrationTest {
     @DisplayName("Тестирование GET запроса с проверкой status code = 200")
     public void getPlacesReturnsOk() {
         createPlaceReturnCreated();
-        List<PlaceDto> places = RestAssured.given()
+        List<PlaceDto> places = given()
                 .get(UrlConstants.PLACE_URL)
                 .then()
                 .log().all()
@@ -78,7 +75,7 @@ public class PlaceControllerIntegrationTest {
     public void getPlaceByIdReturnsOkWithExpectedId() {
         createPlaceReturnCreated();
         PlaceDto placeDto = TestUtils.getPlaceDtoRs();
-        RestAssured.given()
+        given()
                 .pathParam("id", placeDto.getId())
                 .get(UrlConstants.PLACE_URL_VAR)
                 .then()
@@ -89,12 +86,5 @@ public class PlaceControllerIntegrationTest {
                 .body("name", Matchers.is(placeDto.getName()))
                 .body("address", Matchers.is(placeDto.getAddress()))
                 .body("city", Matchers.is(placeDto.getCity()));
-    }
-
-    private void clearDb() {
-        // Удаляем записи из зависимых таблиц в правильном порядке
-        jdbcTemplate.execute("DELETE FROM application.ticket");
-        jdbcTemplate.execute("DELETE FROM application.event");
-        jdbcTemplate.execute("DELETE FROM application.place");
     }
 }

@@ -1,28 +1,27 @@
 package org.javaacademy.afisha.it.controller;
 
 import groovy.util.logging.Slf4j;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.javaacademy.afisha.dto.EventDto;
-import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.util.TestUtils;
-import org.javaacademy.afisha.util.UrlConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.util.List;
-
+import static io.restassured.RestAssured.given;
+import static org.javaacademy.afisha.util.UrlConstants.EVENT_URL;
+import static org.javaacademy.afisha.util.UrlConstants.EVENT_URL_VAR;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
@@ -34,21 +33,21 @@ public class EventControllerIntegrationTest {
 
     @BeforeEach
     public void init() {
-        clearDb();
+        TestUtils.clearDb();
     }
 
     @Test
     @SneakyThrows
     @DisplayName("Тестирование POST запроса с проверкой Status code = 201")
     public void createEventReturnCreated() {
-        createPlaceForEvent();
-        EventDto eventDto = RestAssured.given()
+        TestUtils.createPlace();
+        EventDto eventDto = given()
                 .body(TestUtils.jsonStringFromObject(TestUtils.getEventDto()))
                 .contentType(ContentType.JSON)
-                .post(UrlConstants.EVENT_URL)
+                .post(EVENT_URL)
                 .then()
                 .log().all()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(CREATED.value())
                 .extract()
                 .as(EventDto.class);
         TestUtils.setEventDto(eventDto);
@@ -58,11 +57,11 @@ public class EventControllerIntegrationTest {
     @DisplayName("Тестирование GET запроса с проверкой status code = 200")
     public void getEventReturnsOk() {
         createEventReturnCreated();
-        List<EventDto> places = RestAssured.given()
-                .get(UrlConstants.EVENT_URL)
+        List<EventDto> places = given()
+                .get(EVENT_URL)
                 .then()
                 .log().all()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(OK.value())
                 .extract()
                 .jsonPath()
                 .getList(".", EventDto.class);
@@ -78,31 +77,18 @@ public class EventControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Тестирование GET запроса с получением по id с проверкой status code = 200")
+    @DisplayName("Тестирование GET запроса с получением мероприятия по id с проверкой status code = 200")
     public void getEventByIdReturnsOkWithExpectedId() {
         createEventReturnCreated();
         EventDto eventDto = TestUtils.getEventDtoRs();
-        RestAssured.given()
+        given()
                 .pathParam("id", eventDto.getId())
-                .get(UrlConstants.EVENT_URL_VAR)
+                .get(EVENT_URL_VAR)
                 .then()
                 .log().all()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(OK.value())
                 .assertThat()
                 .body("id", Matchers.is(eventDto.getId().intValue()))
                 .body("name", Matchers.is(eventDto.getName()));
-    }
-
-    private void clearDb() {
-        // Удаляем записи из зависимых таблиц в правильном порядке
-        jdbcTemplate.execute("DELETE FROM application.ticket");
-        jdbcTemplate.execute("DELETE FROM application.event");
-        jdbcTemplate.execute("DELETE FROM application.place");
-    }
-
-    private void createPlaceForEvent() {
-        PlaceDto placeDto = TestUtils.getPlaceDto();
-        jdbcTemplate.update("INSERT INTO application.place (id, name, address, city) VALUES (?, ?, ?, ?)",
-                placeDto.getId(), placeDto.getName(), placeDto.getAddress(), placeDto.getCity());
     }
 }

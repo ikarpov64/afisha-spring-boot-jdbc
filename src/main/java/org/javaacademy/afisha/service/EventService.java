@@ -1,13 +1,9 @@
 package org.javaacademy.afisha.service;
 
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.javaacademy.afisha.config.TicketQuantitiesConfig;
 import org.javaacademy.afisha.dto.*;
 import org.javaacademy.afisha.entity.Event;
-import org.javaacademy.afisha.entity.EventType;
-import org.javaacademy.afisha.entity.Place;
 import org.javaacademy.afisha.exception.EventNotFoundException;
 import org.javaacademy.afisha.exception.EventTypeNotFoundException;
 import org.javaacademy.afisha.exception.PlaceNotFoundException;
@@ -29,7 +25,6 @@ public class EventService {
     private final TransactionTemplate transactionTemplate;
     private final TicketService ticketService;
     private final EventTypeService eventTypeService;
-    private final TicketQuantitiesConfig ticketQuantitiesConfig;
 
     public List<EventDto> getAll() {
         return eventMapper.toEventsDto(eventRepository.findAll());
@@ -67,23 +62,13 @@ public class EventService {
      *                   включая название, дату, место проведения и цену билета.
      */
     public void createEvents(EventDtoRq eventDtoRq) {
-        Map<String, Integer> ticketQuantities = ticketQuantitiesConfig.getQuantities();
-
+        List<EventTypeDto> allEventTypes = eventTypeService.getAll();
         transactionTemplate.executeWithoutResult((transactionStatus) -> {
-            List<EventTypeDto> allEventTypes = eventTypeService.getAll();
-
             allEventTypes.forEach(eventTypeDto -> {
                 EventDto eventDto = eventMapper.toEventDto(eventDtoRq);
                 eventDto.setEventType(eventTypeDto);
                 EventDto savedEvent = save(eventDto);
-
-                int ticketQty = ticketQuantities.getOrDefault(eventTypeDto.getName(), 0);
-                if (ticketQty > 0) {
-                    List<TicketDto> ticketsDto = ticketService.generateTickets(ticketQty,
-                            savedEvent,
-                            eventDtoRq.getPrice());
-                    ticketsDto.forEach(ticketService::save);
-                }
+                ticketService.createTickets(savedEvent, eventDtoRq.getPrice(), eventTypeDto);
             });
         });
     }

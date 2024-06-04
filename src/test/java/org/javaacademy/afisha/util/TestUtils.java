@@ -11,7 +11,6 @@ import org.javaacademy.afisha.entity.Place;
 import java.time.LocalDateTime;
 
 @UtilityClass
-
 public class TestUtils {
     private static final Long DB_ENTITY_ID = 1000L;
     private static final String PLACE_NAME = "theater";

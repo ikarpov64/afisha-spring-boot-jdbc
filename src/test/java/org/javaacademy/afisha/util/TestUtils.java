@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.javaacademy.afisha.dto.*;
 import org.javaacademy.afisha.entity.Place;
 import java.time.LocalDateTime;
 
 @UtilityClass
+
 public class TestUtils {
     private static final Long DB_ENTITY_ID = 1000L;
     private static final String PLACE_NAME = "theater";
@@ -18,7 +20,9 @@ public class TestUtils {
     private static final String TICKET_EMAIL = "test@email.com";
     private static final String EVENT_NAME = "various artist";
 
+    @Getter
     private static PlaceDto placeDtoRs;
+    @Getter
     private static EventDto eventDtoRs;
 
     public static void setPlaceDto(PlaceDto placeDto) {
@@ -28,23 +32,6 @@ public class TestUtils {
     public static void setEventDto(EventDto eventDto) {
         TestUtils.eventDtoRs = eventDto;
     }
-
-    public static PlaceDto getPlaceDtoRs() {
-        return placeDtoRs;
-    }
-
-    public static EventDto getEventDtoRs() {
-        return eventDtoRs;
-    }
-
-//    public static Place getPlace() {
-//        Place place = new Place();
-//        place.setId(DB_ENTITY_ID);
-//        place.setName(PLACE_NAME);
-//        place.setCity(PLACE_CITY);
-//        place.setAddress(PLACE_ADDRESS);
-//        return place;
-//    }
 
     public static PlaceDto getPlaceDto() {
         PlaceDto placeDto = new PlaceDto();
@@ -64,13 +51,6 @@ public class TestUtils {
         eventDto.setName(EVENT_NAME);
         return eventDto;
     }
-
-//    public static TicketDto getTicketDto() {
-//        TicketDto ticketDto = new TicketDto();
-//        ticketDto.setId(DB_ENTITY_ID);
-//        ticketDto.setEvent(eventDtoRs);
-//        return ticketDto;
-//    }
 
     public static TicketDtoRq getTicketDtoRq() {
         TicketDtoRq ticketDto = new TicketDtoRq();

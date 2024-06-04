@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.javaacademy.afisha.dto.EventDto;
+import org.javaacademy.afisha.dto.PlaceDto;
 import org.javaacademy.afisha.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,7 @@ import static org.javaacademy.afisha.util.UrlConstants.EVENT_URL;
 import static org.javaacademy.afisha.util.UrlConstants.EVENT_URL_VAR;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
@@ -33,14 +33,14 @@ public class EventControllerIntegrationTest {
 
     @BeforeEach
     public void init() {
-        TestUtils.clearDb();
+        clearDb();
     }
 
     @Test
     @SneakyThrows
     @DisplayName("Тестирование POST запроса с проверкой Status code = 201")
     public void createEventReturnCreated() {
-        TestUtils.createPlace();
+        createPlace();
         EventDto eventDto = given()
                 .body(TestUtils.jsonStringFromObject(TestUtils.getEventDto()))
                 .contentType(ContentType.JSON)
@@ -90,5 +90,29 @@ public class EventControllerIntegrationTest {
                 .assertThat()
                 .body("id", Matchers.is(eventDto.getId().intValue()))
                 .body("name", Matchers.is(eventDto.getName()));
+    }
+
+    @Test
+    @DisplayName("Тестирование GET запроса с получением мероприятия по id с проверкой status code = 404")
+    public void getEventByIdReturnsNotFound() {
+        given()
+                .pathParam("id", 1)
+                .get(EVENT_URL_VAR)
+                .then()
+                .log().all()
+                .statusCode(NOT_FOUND.value());
+    }
+
+    private void createPlace() {
+        PlaceDto placeDto = TestUtils.getPlaceDto();
+        jdbcTemplate.update("INSERT INTO application.place (id, name, address, city) VALUES (?, ?, ?, ?)",
+                placeDto.getId(), placeDto.getName(), placeDto.getAddress(), placeDto.getCity());
+    }
+
+    private void clearDb() {
+        // Удаляем записи из зависимых таблиц
+        jdbcTemplate.execute("DELETE FROM application.ticket");
+        jdbcTemplate.execute("DELETE FROM application.event");
+        jdbcTemplate.execute("DELETE FROM application.place");
     }
 }

@@ -3,14 +3,12 @@ package org.javaacademy.afisha.service;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.config.TicketQuantitiesConfig;
 import org.javaacademy.afisha.dto.EventDto;
-import org.javaacademy.afisha.dto.ReportDtoRs;
 import org.javaacademy.afisha.dto.TicketDto;
 import org.javaacademy.afisha.entity.Ticket;
 import org.javaacademy.afisha.exception.TicketNotAvailableException;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.javaacademy.afisha.repository.ReportRepository;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @RequiredArgsConstructor
@@ -20,23 +18,6 @@ public class SaleService {
     private final TicketMapper ticketMapper;
     private final TicketQuantitiesConfig ticketQuantitiesConfig;
 
-    // TODO: 29.05.2024 Переписать javadoc 
-    /**
-     * Генерирует отчет по мероприятиям с деталями о количестве проданных билетов и общей сумме продаж.
-     * <p>
-     * Этот метод извлекает список объектов {@link TicketDto}, каждый из которых представляет мероприятие с
-     * следующими деталями:
-     * <ul>
-     *   <li>Название мероприятия</li>
-     *   <li>Тип мероприятия</li>
-     *   <li>Количество проданных билетов</li>
-     *   <li>Общая сумма продаж</li>
-     * </ul>
-     * Данные извлекаются из {@link ReportRepository}.
-     * </p>
-     *
-     * @return объект {@link TicketDto}, содержащий данные о проданном билете.
-     */
     public TicketDto sellTicket(Long eventId, String clientEmail) {
         EventDto event = eventService.getById(eventId);
         if (!ticketQuantitiesConfig.getQuantities().containsKey(event.getEventType().getName())) {
@@ -44,7 +25,6 @@ public class SaleService {
             newTicket.setEvent(event);
             newTicket.setClientEmail(clientEmail);
             newTicket.setSold(true);
-            // TODO: 29.05.2024 Сохраняет тикет со статусом не продан, доделать.
             return ticketService.save(newTicket);
         }
         Ticket ticket = ticketService.getByEventId(eventId);

@@ -6,11 +6,9 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.TicketDto;
-import org.javaacademy.afisha.entity.Event;
 import org.javaacademy.afisha.entity.Ticket;
 import org.javaacademy.afisha.mapper.TicketMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 

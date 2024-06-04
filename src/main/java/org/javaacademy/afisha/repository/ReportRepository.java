@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.dto.ReportDtoRs;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ReportRepository {
-    private static String REPORT_QUERY = """
+    private static final String REPORT_QUERY = """
             SELECT ev.name as "event_name",
                    et.name as "event_type",
                    COALESCE(res.sum, 0) AS "sold_amount",
@@ -36,18 +35,6 @@ public class ReportRepository {
             """;
     private final JdbcTemplate jdbcTemplate;
 
-    private static class ReportRowMapper implements RowMapper<ReportDtoRs> {
-        @Override
-        public ReportDtoRs mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ReportDtoRs report = new ReportDtoRs();
-            report.setEventName(rs.getString("event_name"));
-            report.setEventType(rs.getString("event_type"));
-            report.setTicketSold(rs.getLong("tickets_sold"));
-            report.setSoldAmount(rs.getBigDecimal("sold_amount"));
-            return report;
-        }
-    }
-
     /**
      * Получает отчет по мероприятиям.
      * <p>
@@ -59,6 +46,15 @@ public class ReportRepository {
      * @return список объектов {@link ReportDtoRs} с данными отчета.
      */
     public List<ReportDtoRs> getReport() {
-        return jdbcTemplate.query(REPORT_QUERY, new ReportRowMapper());
+        return jdbcTemplate.query(REPORT_QUERY, this::mapRow);
+    }
+
+    public ReportDtoRs mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ReportDtoRs report = new ReportDtoRs();
+        report.setEventName(rs.getString("event_name"));
+        report.setEventType(rs.getString("event_type"));
+        report.setTicketSold(rs.getLong("tickets_sold"));
+        report.setSoldAmount(rs.getBigDecimal("sold_amount"));
+        return report;
     }
 }

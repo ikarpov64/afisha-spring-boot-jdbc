@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.javaacademy.afisha.entity.EventType;
 import org.javaacademy.afisha.mapper.EventTypeMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 

@@ -28,8 +28,6 @@ public class EventRepository {
     private static String INSERT_QUERY = "INSERT INTO application.event(name, event_date, event_type_id, place_id) "
             + "VALUES(?, ?, ?, ?)";
     private final EventMapper eventMapper;
-    private final PlaceRepository placeRepository;
-    private final EventTypeRepository eventTypeRepository;
     private final JdbcTemplate jdbcTemplate;
 
     public List<Event> findAll() {
